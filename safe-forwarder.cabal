@@ -64,6 +64,7 @@ executable safe-forwarder
                        conduit == 1.2.3.1,
                        conduit-extra,
                        mtl == 2.2.1,
+                       bytestring,
                        network
   
   -- Directories containing source files.
