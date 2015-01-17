@@ -65,7 +65,10 @@ executable safe-forwarder
                        conduit-extra,
                        mtl == 2.2.1,
                        bytestring,
-                       network
+                       network,
+                       resourcet,
+                       transformers == 0.4.2.0,
+                       attoparsec == 0.12.1.2
   
   -- Directories containing source files.
   hs-source-dirs:      src
