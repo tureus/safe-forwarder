@@ -42,12 +42,11 @@ fileToBS handleMaker = source C.$= bsSplitterConduit
   where source = CB.sourceIOHandle handleMaker
         bsSplitterConduit = CB.lines
 
-bsPrinter :: C.Sink BS.ByteString (ResourceT IO) ()
-bsPrinter = CL.mapM_ $ liftIO . BS.putStrLn
+printer :: Show a => C.Sink a (ResourceT IO) ()
+printer = CL.mapM_ $ liftIO . putStrLn . show
 
---parseToLogData :: (Monad m, CATT.AttoparsecInput a) => ATT.Parser a -> C.Conduit BS.ByteString IO (Either LogData (CATT.PositionRange, b))
-parseToLogData :: ATT.Parser BS.ByteString -> C.Conduit a0 m0 (Either CATT.ParseError (CATT.PositionRange, b0))
-parseToLogData = CATT.conduitParserEither 
+parseToLogData:: C.Conduit BS.ByteString (ResourceT IO) (Either CATT.ParseError (CATT.PositionRange, LogData))
+parseToLogData = CATT.conduitParserEither syslogParser
 
 -- Test file generator
 fileWriter :: Handle -> C.Sink BS.ByteString IO ()
@@ -69,7 +68,11 @@ staticFileReaderMain :: IO ()
 staticFileReaderMain = do
 
   let openAction = openFile "syslog.log" ReadMode
-  runResourceT $ fileToBS openAction C.$$ bsPrinter
+  runResourceT $ do
+    fileToBS openAction C.$= parseToLogData C.$$ printer
+
+testParser :: IO ()
+testParser = ATT.parseTest syslogParser syslogTestString
 
 main :: IO ()
 main = staticFileReaderMain

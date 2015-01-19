@@ -68,7 +68,9 @@ executable safe-forwarder
                        network,
                        resourcet,
                        transformers == 0.4.2.0,
-                       attoparsec == 0.12.1.2
+                       attoparsec == 0.12.1.2,
+                       time == 1.4.2,
+                       old-locale
   
   -- Directories containing source files.
   hs-source-dirs:      src
