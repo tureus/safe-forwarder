@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Main (main) where
@@ -66,10 +67,9 @@ syslogReceiverMain = do
 
 staticFileReaderMain :: IO ()
 staticFileReaderMain = do
-
   let openAction = openFile "syslog.log" ReadMode
   runResourceT $ do
-    fileToBS openAction C.$= parseToLogData C.$$ printer
+    fileToBS openAction C.$= (CL.isolate 1) C.$= parseToLogData C.$$ printer
 
 testParser :: IO ()
 testParser = ATT.parseTest syslogParser syslogTestString

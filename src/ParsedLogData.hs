@@ -36,7 +36,7 @@ syslogParser = do
   srcAddr <- ip
   space
   msg <- ATT.takeByteString
-  return LogData{pri = pri, timestamp = mbDate, source = srcAddr, message = ""}
+  return LogData{pri = pri, timestamp = mbDate, source = srcAddr, message = msg}
 
 priority :: Parser Priority
 priority = do
